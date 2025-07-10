@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Court Auction Map</title>
+</head>
+<body>
+    <input id="geoInput" placeholder="도로명 주소 입력" />
+    <div id="map" style="width:95vw; height:95vh;"></div>
+
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey={{ kakao_key }}&libraries=services"></script>
+
+    <script>
+        window.onload = function () {
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(37.655943, 126.840551),
+                level: 3
+            };
+            var map = new kakao.maps.Map(container, options);
+
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(37.655943, 126.840551)
+            });
+
+            var iwContent = '<div class="iw-content">37.655943 <br>126.840551 </div>';
+
+            var infowindow = new kakao.maps.InfoWindow({
+                position: new kakao.maps.LatLng(37.655943, 126.840551),
+                content: iwContent
+            });
+
+            infowindow.open(map, marker);
+
+            var geocoder = new kakao.maps.services.Geocoder();
+
+            var callback = function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    console.log(result);
+                    var addressLatLng = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    map.setCenter(addressLatLng);
+
+                    var marker = new kakao.maps.Marker({ map: map, position: addressLatLng });
+
+                    var iwContent =
+                        '<div class="iw-content">' + result[0].x + '<br>' +
+                        result[0].y + '<br>' +
+                        result[0].road_address.address_name + '</div>';
+
+                    var infowindow = new kakao.maps.InfoWindow({ position: addressLatLng, content: iwContent });
+
+                    infowindow.open(map, marker);
+                }
+            };
+
+            document.getElementById('geoInput').addEventListener('change', function (event) {
+                geocoder.addressSearch(event.target.value, callback);
+            });
+        };
+    </script>
+</body>
+</html>
