@@ -35,6 +35,10 @@
 
             var geocoder = new kakao.maps.services.Geocoder();
 
+            document.getElementById('geoInput').addEventListener('change', function (event) {
+                geocoder.addressSearch(event.target.value, callback);
+            });
+
             var callback = function (result, status) {
                 if (status === kakao.maps.services.Status.OK) {
                     console.log(result);
@@ -54,10 +58,6 @@
                     infowindow.open(map, marker);
                 }
             };
-
-            document.getElementById('geoInput').addEventListener('change', function (event) {
-                geocoder.addressSearch(event.target.value, callback);
-            });
         };
     </script>
 </body>

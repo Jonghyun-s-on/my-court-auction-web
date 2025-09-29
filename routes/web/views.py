@@ -13,3 +13,9 @@ def index():
 @views_bp.route('/test')
 def test():
     return render_template('test.html')
+
+# 테스트 페이지
+# 추후 삭제 예정
+@views_bp.route('/test-test')
+def test1():
+    return render_template('test2.html')
